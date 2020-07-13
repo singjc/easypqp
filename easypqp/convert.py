@@ -228,12 +228,14 @@ class pepxml:
 								click.echo("Info: Parsing PTMProphet results.")
 								for analysis_result in search_hit.findall('.//pepxml_ns:analysis_result', namespaces):
 									if analysis_result.attrib['analysis'] == 'ptmprophet':
-										for ptmprophet_result in analysis_result.findall('.//pepxml_ns:ptmprophet_result:parameter', namespaces):
+										for ptmprophet_result in analysis_result.findall('.//pepxml_ns:ptmprophet_result', namespaces):
 											print( ptmprophet_result.attrib )
 											scores["ptm_prior_pep"] = 1.0 - float(ptmprophet_result.attrib['prior'])
 											prev_ptm_prior_pep = scores["ptm_prior_pep"]
 											scores["ptm_peptide"] = str(ptmprophet_result.attrib['ptm_peptide'])
-											scores["ptm_mean_best_prob"] = 1.0 - float(ptmprophet_result.attrib['mean_best_prob'])
+											for parameter in ptmprophet_result.findall('.//pepxml_ns:parameter', namespaces):
+												if parameter.attrib['name'] == 'mean_best_prob':
+													scores["ptm_mean_best_prob"] = 1.0 - float(parameter.attrib['value'])
 											click.echo( "ptm_peptide: %s" % str(scores["ptm_peptide"]) )
 
                                                                         
