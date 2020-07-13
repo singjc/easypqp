@@ -225,6 +225,7 @@ class pepxml:
 									scores["pep"] = prev_pep
 								
 								# parse PTMProphet results if available
+								click.echo("Info: Parsing PTMProphet results.")
 								for analysis_result in search_hit.findall('.//pepxml_ns:analysis_result', namespaces):
 									if analysis_result.attrib['analysis'] == 'ptmprophet':
 										for ptmprophet_result in analysis_result.findall('.//pepxml_ns:ptmprophet_result', namespaces):
@@ -232,6 +233,8 @@ class pepxml:
 											prev_ptm_prior_pep = scores["ptm_prior_pep"]
 											scores["ptm_peptide"] = str(ptmprophet_result.attrib['ptm_peptide'])
 											scores["ptm_mean_best_prob"] = 1.0 - float(ptmprophet_result.attrib['mean_best_prob'])
+											click.echo( "ptm_peptide: %s" % str(scores["ptm_peptide"]) )
+
                                                                         
 								peptides.append({**{'run_id': base_name, 'scan_id': int(start_scan), 'hit_rank': int(hit_rank), 'massdiff': float(massdiff), 'precursor_charge': int(assumed_charge), 'retention_time': float(retention_time_sec), 'ion_mobility': float(ion_mobility), 'peptide_sequence': peptide, 'modifications': modifications, 'nterm_modification': nterm_modification, 'cterm_modification': cterm_modification, 'protein_id': protein, 'gene_id': gene, 'num_tot_proteins': num_tot_proteins, 'decoy': is_decoy}, **scores})
 				elem.clear()
