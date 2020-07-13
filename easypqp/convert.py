@@ -229,7 +229,7 @@ class pepxml:
 								for analysis_result in search_hit.findall('.//pepxml_ns:analysis_result', namespaces):
 									if analysis_result.attrib['analysis'] == 'ptmprophet':
 										for ptmprophet_result in analysis_result.findall('.//pepxml_ns:ptmprophet_result', namespaces):
-											print( ptmprophet_result )
+											print( ptmprophet_result.attrib )
 											scores["ptm_prior_pep"] = 1.0 - float(ptmprophet_result.attrib['prior'])
 											prev_ptm_prior_pep = scores["ptm_prior_pep"]
 											scores["ptm_peptide"] = str(ptmprophet_result.attrib['ptm_peptide'])
