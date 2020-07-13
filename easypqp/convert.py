@@ -223,6 +223,14 @@ class pepxml:
 								if "pep" not in scores:
 									# If 2 search hits have the same rank only the first one has the analysis_result explicitly written out.
 									scores["pep"] = prev_pep
+								
+								# parse PTMProphet results if available
+								for analysis_result in search_hit.findall('.//pepxml_ns:analysis_result', namespaces):
+									if analysis_result.attrib['analysis'] == 'ptmprophet':
+										for ptmprophet_result in analysis_result.findall('.//pepxml_ns:ptmprophet_result', namespaces):
+											scores["ptm_prior_pep"] = 1.0 - float(ptmprophet_result.attrib['prior'])
+											prev_ptm_prior_pep = scores["ptm_prior_pep"]
+											scores["ptm_peptide"] = str(ptmprophet_result.attrib['ptm_peptide'])
                                                                         
 								peptides.append({**{'run_id': base_name, 'scan_id': int(start_scan), 'hit_rank': int(hit_rank), 'massdiff': float(massdiff), 'precursor_charge': int(assumed_charge), 'retention_time': float(retention_time_sec), 'ion_mobility': float(ion_mobility), 'peptide_sequence': peptide, 'modifications': modifications, 'nterm_modification': nterm_modification, 'cterm_modification': cterm_modification, 'protein_id': protein, 'gene_id': gene, 'num_tot_proteins': num_tot_proteins, 'decoy': is_decoy}, **scores})
 				elem.clear()
